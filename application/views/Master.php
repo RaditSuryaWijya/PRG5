@@ -191,6 +191,10 @@
                         <input type="file" class="form-control" id="edit_gambar" name="gambar" accept="image/*">
                         <small class="form-text text-muted">Click to select an image file (optional).</small>
                     </div>
+                    <div class="mb-3">
+                        <label>Current Image:</label><br>
+                        <img id="currentImage" src="" alt="Current Laptop Image" style="max-width: 150px; height: auto; display: none;">
+                    </div>
                     <button type="submit" class="btn btn-primary">Update</button>
                     <button type="button" onclick="toggleForm('main')" class="btn btn-secondary">Cancel</button>
                 </form>
@@ -213,6 +217,15 @@
         document.getElementById('edit_merk').value = data.merk_laptop;
         document.getElementById('edit_stok').value = data.stok;
         document.getElementById('edit_harga').value = data.harga;
+
+        // Set the image source for the current image
+        const currentImage = document.getElementById('currentImage');
+        if (data.gambar) {
+            currentImage.src = '<?= base_url('assets/images/') ?>' + data.gambar; // Adjust the path if needed
+            currentImage.style.display = 'block'; // Show the image
+        } else {
+            currentImage.style.display = 'none'; // Hide if no image
+        }
     }
 
     function showDetails(data) {

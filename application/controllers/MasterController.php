@@ -23,16 +23,54 @@ class MasterController extends CI_Controller {
         $this->main_page('Master Laptop',$message);
 	}
 
-    public function add(){
-        $data = [
-            'seri_laptop' => $this->input->post('seri'),
-            'merk_laptop' => $this->input->post('merk'),
-            'stok' => $this->input->post('stok'),
-            'harga' => $this->input->post('harga')
-        ];
-
-        $this->LaptopModel->insert_laptop($data);
-
-        redirect('index.php/MasterController/view?message=Data+berhasil+disimpan!');
-    }
+    public function add() {
+        // Load the file upload library
+        $this->load->library('upload');
+    
+        // Set upload configuration
+        $config['upload_path'] = './assets/images/'; // Path to save uploaded images
+        $config['allowed_types'] = 'jpg|jpeg|png|gif'; // Allowed file types
+        $config['max_size'] = 2048; // Max file size in KB (2 MB)
+    
+        // Initialize the upload library with the config
+        $this->upload->initialize($config);
+    
+        // Check if the file was uploaded
+        if ($this->upload->do_upload('gambar')) {
+            // Get uploaded file data
+            $upload_data = $this->upload->data();
+            
+            // Get the latest ID from the database
+            $this->db->select_max('id_laptop'); // Assuming 'id_laptop' is your primary key
+            $query = $this->db->get('laptop'); // Get the max id from the laptop table
+            $latest_id = $query->row()->id_laptop; // Get the latest id
+            $new_id = $latest_id ? $latest_id + 1 : 1; // Increment or set to 1 if there are no records
+    
+            // Generate new unique image name
+            $new_image_name = 'IMG_DATA_' . $new_id . $upload_data['file_ext']; // e.g., IMG_DATA_1.jpg
+    
+            // Rename the uploaded file
+            rename('./assets/images/' . $upload_data['file_name'], './assets/images/' . $new_image_name);
+    
+            // Prepare data for the database (including the image name)
+            $data = [
+                'seri_laptop' => $this->input->post('seri'),
+                'merk_laptop' => $this->input->post('merk'),
+                'stok' => $this->input->post('stok'),
+                'harga' => $this->input->post('harga'),
+                'gambar' => $new_image_name, // Set the new image name
+                'status' => 1 // Assuming status is always 1 for new entries
+            ];
+    
+            // Insert data into the database
+            $this->LaptopModel->insert_laptop($data);
+    
+            // Redirect with success message
+            redirect('index.php/MasterController/view?message=Data+berhasil+disimpan!');
+        } else {
+            // Handle the error and redirect back with an error message
+            $error = $this->upload->display_errors();
+            redirect('index.php/MasterController/view?message=' . urlencode($error));
+        }
+    }       
 }

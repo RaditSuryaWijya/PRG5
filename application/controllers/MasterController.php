@@ -17,9 +17,9 @@ class MasterController extends CI_Controller {
         $this->load->view('template', $data);
     }
 
-	public function view($value=null)
+	public function view()
 	{
-        $message = $value ? $value : null;
+        $message = $this->input->get('message') ? $this->input->get('message') : null;
         $this->main_page('Master Laptop',$message);
 	}
 
@@ -33,6 +33,6 @@ class MasterController extends CI_Controller {
 
         $this->LaptopModel->insert_laptop($data);
 
-        redirect('index.php/MasterController/view/'.urlencode('Data berhasil ditambah!'));
+        redirect('index.php/MasterController/view?message=Data+berhasil+disimpan!');
     }
 }

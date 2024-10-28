@@ -61,7 +61,7 @@
                             <td><?= $l['seri_laptop'] ?></td>
                             <td><?= $l['merk_laptop'] ?></td>
                             <td><?= $l['stok'] ?></td>
-                            <td><?= $l['harga'] ?></td>
+                            <td style="text-align: right;">Rp <?= number_format($l['harga'], 0, ',', '.') ?></td>
                             <td>
                                 <button onclick="editData(<?= htmlspecialchars(json_encode($l), ENT_QUOTES, 'UTF-8') ?>)" class="btn btn-sm btn-warning">
                                     <i class="mdi mdi-pencil"></i> Edit

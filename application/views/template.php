@@ -43,6 +43,10 @@
                                 <div class="sb-nav-link-icon"><i class='bx bx-money' ></i></div>
                                 Payment 
                             </a>
+                            <a class="nav-link" href="<?php echo base_url('index.php/ReportController/view') ?>">
+                                <div class="sb-nav-link-icon"><i class='bx bx-money' ></i></div>
+                                Report 
+                            </a>
                     </div>
                 </nav>
             </div>

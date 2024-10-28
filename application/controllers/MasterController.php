@@ -7,13 +7,32 @@ class MasterController extends CI_Controller {
         $this->load->model('LaptopModel');
     }
 
-	public function view()
-	{
-        $data['title'] = 'Master Laptop';
+    public function main_page($title,$message=null){
+        $data['title'] = $title;
+        $data['message'] = $message;
         $data['laptop'] = $this->LaptopModel->get_all();
 
         $data['content'] = $this->load->view('master', $data, TRUE);
 
         $this->load->view('template', $data);
+    }
+
+	public function view($value=null)
+	{
+        $message = $value ? $value : null;
+        $this->main_page('Master Laptop',$message);
 	}
+
+    public function add(){
+        $data = [
+            'seri_laptop' => $this->input->post('seri'),
+            'merk_laptop' => $this->input->post('merk'),
+            'stok' => $this->input->post('stok'),
+            'harga' => $this->input->post('harga')
+        ];
+
+        $this->LaptopModel->insert_laptop($data);
+
+        redirect('index.php/MasterController/view/'.urlencode('Data berhasil ditambah!'));
+    }
 }

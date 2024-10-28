@@ -5,7 +5,7 @@ class LaptopModel extends CI_Model{
         parent::__construct();
         $this->load->database();
     }
-    public function insert_karyawan($data){
+    public function insert_laptop($data){
         return $this->db->insert('laptop',$data);
     }
 
@@ -18,12 +18,12 @@ class LaptopModel extends CI_Model{
         return $this->db->get_where('laptop',['id_laptop' => $id])->row_array();
     }
 
-    public function delete_karyawan($id){
+    public function delete_laptop($id){
         $this->db->where('id_laptop',$id);
         return $this->db->delete('laptop');
     }
 
-    public function update_karyawan($id, $data) {
+    public function update_laptop($id, $data) {
         $this->db->where('id_laptop', $id);
         return $this->db->update('laptop', $data);
     }

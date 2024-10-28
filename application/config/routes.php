@@ -55,3 +55,4 @@ $route['translate_uri_dashes'] = FALSE;
 
 $route['viewLaptop'] = "LaptopController/view";
 $route['viewMaster'] = "MasterController/view";
+$route['addMaster'] = "MasterController/add";

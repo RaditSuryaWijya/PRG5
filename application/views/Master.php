@@ -85,7 +85,7 @@
                 <i class="mdi mdi-plus"></i> Add Laptop Data
             </div>
             <div class="card-body">
-                <form action="<?= base_url('index.php/MasterController/addLaptop') ?>" method="post">
+                <form id="addForm" action="<?= base_url('index.php/MasterController/add') ?>" method="post">
                     <div class="mb-3">
                         <label for="seri" class="form-label">Serie</label>
                         <input type="text" class="form-control" id="seri" name="seri" required>

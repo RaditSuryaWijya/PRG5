@@ -109,8 +109,8 @@
         <i class="bi bi-cart"></i> <span id="floatingCartText">Items (0)</span>
     </button>
 
-    <div class="transaction-background">
-        <div class="transaction-form" id="transactionForm">
+    <div class="transaction-background" id="transactionForm" style="display: none;">
+        <div class="transaction-form">
             <h2 class="text-center mb-4">Transaction Details</h2>
             
             <!-- Listed Items Table -->

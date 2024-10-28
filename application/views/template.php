@@ -49,10 +49,15 @@
                                 <div class="sb-nav-link-icon"><i class='bx bx-money' ></i></div>
                                 Market 
                             </a>
+                    </div>
+                    <div class="sb-sidenv-menu">
+                        <div class="nav">
+                            <div class="sb-sidenav-menu-heading">Report</div>
                             <a class="nav-link" href="<?php echo base_url('index.php/ReportController/view') ?>">
                                 <div class="sb-nav-link-icon"><i class='bx bx-money' ></i></div>
-                                Report 
+                                Transaction History 
                             </a>
+                        </div>
                     </div>
                 </nav>
             </div>

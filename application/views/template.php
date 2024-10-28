@@ -12,6 +12,12 @@
         <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font/css/materialdesignicons.min.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+        <style>
+            #floatingCartBtn {
+                transition: opacity 0.3s ease;
+            }
+        </style>
     </head>
     <body class="sb-nav-fixed">
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
@@ -41,7 +47,7 @@
                             <div class="sb-sidenav-menu-heading">Transaction</div>
                             <a class="nav-link" href="<?php echo base_url('index.php/TransaksiController/view') ?>">
                                 <div class="sb-nav-link-icon"><i class='bx bx-money' ></i></div>
-                                Payment 
+                                Market 
                             </a>
                             <a class="nav-link" href="<?php echo base_url('index.php/ReportController/view') ?>">
                                 <div class="sb-nav-link-icon"><i class='bx bx-money' ></i></div>

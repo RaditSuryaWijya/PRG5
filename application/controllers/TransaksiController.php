@@ -9,10 +9,10 @@ class TransaksiController extends CI_Controller {
 
 	public function view()
 	{
-        $data['title'] = 'Dashboard';
+        $data['title'] = 'Technest Marketplace';
         $data['laptop'] = $this->LaptopModel->get_all();
 
-        $data['content'] = $this->load->view('dashboard', $data, TRUE);
+        $data['content'] = $this->load->view('Transaksi', $data, TRUE);
 
         $this->load->view('template', $data);
 	}

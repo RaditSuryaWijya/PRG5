@@ -27,6 +27,27 @@
         width: 100%; /* Make images responsive */
         height: auto; /* Maintain aspect ratio */
     }
+      /* Style for Background Container */
+    .transaction-background {
+        background-color: #f8f9fa;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    .transaction-form h2 {
+        color: #333;
+    }
+
+    .transaction-form input, .transaction-form select, .transaction-form textarea {
+        margin-bottom: 15px;
+    }
+
+    .transaction-table {
+        margin-bottom: 20px;
+    }
 </style>
 
 <div class="container mt-5">
@@ -87,9 +108,187 @@
     <button id="floatingCartBtn" class="btn btn-primary" style="position: fixed; bottom: 30px; right: 30px; display: none;" onclick="toggleTransactionForm()">
         <i class="bi bi-cart"></i> <span id="floatingCartText">Items (0)</span>
     </button>
+
+    <div class="transaction-background">
+        <div class="transaction-form" id="transactionForm">
+            <h2 class="text-center mb-4">Transaction Details</h2>
+            
+            <!-- Listed Items Table -->
+            <table class="table table-bordered transaction-table">
+                <thead>
+                    <tr>
+                        <th scope="col">Item</th>
+                        <th scope="col">Quantity</th>
+                        <th scope="col">Unit Price</th>
+                        <th scope="col">Total Price</th>
+                    </tr>
+                </thead>
+                <tbody id="transactionItems">
+                    <!-- Item rows will be added dynamically -->
+                </tbody>
+            </table>
+
+            <!-- Customer Information -->
+            <div class="mb-3">
+                <label for="customerName" class="form-label">Customer Name</label>
+                <input type="text" class="form-control" id="customerName" placeholder="Enter your name" required>
+            </div>
+            <div class="mb-3">
+                <label for="customerEmail" class="form-label">Email Address</label>
+                <input type="email" class="form-control" id="customerEmail" placeholder="Enter your email" required>
+            </div>
+
+            <!-- Payment Information -->
+            <div class="mb-3">
+                <label for="paymentType" class="form-label">Payment Type</label>
+                <select class="form-select" id="paymentType" required>
+                    <option selected disabled>Select payment type</option>
+                    <option value="Bank Transfer">Bank Transfer</option>
+                    <option value="Cash on Delivery">Cash on Delivery</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="norek" class="form-label">Bank Account</label>
+                <input type="number" class="form-control" id="norek" placeholder="Enter your bank account" required>
+            </div>
+            <div class="mb-3">
+                <label for="transactionNotes" class="form-label">Notes</label>
+                <textarea class="form-control" id="transactionNotes" rows="3" placeholder="Additional notes" required></textarea>
+            </div>
+
+            <!-- Total Amount -->
+            <div class="mb-3">
+                <h5>Total: <span id="transactionTotal">Rp 0</span></h5>
+            </div>
+
+            <!-- Confirm Button -->
+            <button class="btn btn-success w-100" onclick="confirmTransaction()">Confirm Purchase</button>
+            <button class="btn btn-secondary w-100 mt-2" onclick="toggleTransactionForm()">Cancel</button>
+        </div>
+    </div>
 </div>
 
 <script>
+    document.getElementById('paymentType').addEventListener('change', function() {
+        const norekField = document.getElementById('norek');
+        
+        if (this.value === 'Cash on Delivery') {
+            norekField.disabled = true;
+            norekField.value = ''; // Clear the field when disabled
+        } else {
+            norekField.disabled = false;
+        }
+    });
+
+    function toggleTransactionForm() {
+        const form = document.getElementById('transactionForm');
+        const products = document.getElementById('productCards');
+        const searchBar = document.querySelector('.mb-4.row');
+
+        if (form.style.display === 'none' || form.style.display === '') {
+            form.style.display = 'block';
+            products.style.display = 'none';
+            searchBar.style.display = 'none';
+            loadTransactionItems();
+        } else {
+            form.style.display = 'none';
+            products.style.display = 'flex';
+            searchBar.style.display = 'flex';
+        }
+    }
+
+    function loadTransactionItems() {
+        const items = document.querySelectorAll('.qty-input');
+        const transactionItems = document.getElementById('transactionItems');
+        transactionItems.innerHTML = ''; // Clear previous items
+        let total = 0;
+
+        items.forEach(input => {
+            const quantity = parseInt(input.value, 10) || 0;
+            if (quantity > 0) {
+                const card = input.closest('.card');
+                const title = card.querySelector('.card-title').textContent;
+                const price = parseInt(card.querySelector('.price').textContent.replace('Rp ', '').replace(/\./g, ''));
+                const itemTotal = quantity * price;
+                total += itemTotal;
+
+                // Create a new row for each item
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${title}</td>
+                    <td>${quantity}</td>
+                    <td>Rp ${price.toLocaleString('id-ID')}</td>
+                    <td>Rp ${itemTotal.toLocaleString('id-ID')}</td>
+                `;
+                transactionItems.appendChild(row);
+            }
+        });
+
+        // Update total amount
+        document.getElementById('transactionTotal').textContent = `Rp ${total.toLocaleString('id-ID')}`;
+    }
+
+    function confirmTransaction() {
+        // Implement transaction submission logic here
+        alert('Transaction confirmed!');
+        toggleTransactionForm(); // Hide the form after confirming
+    }
+
+    function updateQty(button, change) {
+        const input = button.parentElement.querySelector('.qty-input');
+        const stock = parseInt(button.closest('.card').getAttribute('data-stock'), 10);
+        let quantity = parseInt(input.value, 10) || 0;
+
+        // Adjust quantity based on button clicked (+ or -)
+        quantity += change;
+
+        // Prevent quantity from going below 0 or above stock
+        if (quantity < 0) quantity = 0;
+        if (quantity > stock) quantity = stock;
+
+        input.value = quantity;
+
+        // Check the stock to disable/enable the plus button
+        const minusButton = button.parentElement.querySelector('.qty-btn:nth-child(1)');
+        const plusButton = button.parentElement.querySelector('.qty-btn:nth-child(3)');
+
+        if (quantity >= stock) {
+            plusButton.disabled = true;
+        } else {
+            plusButton.disabled = false;
+        }
+
+        if (quantity <= 0) {
+            minusButton.disabled = true;
+        } else {
+            minusButton.disabled = false;
+        }
+
+        updateFloatingCart();
+    }
+
+    function updateFloatingCart() {
+        let totalItems = 0;
+        document.querySelectorAll('.qty-input').forEach(input => {
+            totalItems += parseInt(input.value, 10) || 0;
+        });
+        
+        const cartText = document.getElementById('floatingCartText');
+        cartText.textContent = `Items (${totalItems})`;
+
+        // Show or hide the cart button based on the number of items
+        const floatingCartBtn = document.getElementById('floatingCartBtn');
+        floatingCartBtn.style.display = totalItems > 0 ? 'block' : 'none';
+    }
+
+    // Initialize disable state for minus button at zero quantity
+    document.addEventListener("DOMContentLoaded", function() {
+        document.querySelectorAll('.qty-input').forEach(input => {
+            const minusButton = input.parentElement.querySelector('.qty-btn:nth-child(1)');
+            minusButton.disabled = true;
+        });
+    });
+
     function applyFilters() {
         const searchInput = document.getElementById('searchInput').value.toLowerCase();
         const laptops = document.querySelectorAll('.laptop-card');

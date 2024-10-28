@@ -166,6 +166,7 @@
             <button class="btn btn-secondary w-100 mt-2" onclick="toggleTransactionForm()">Cancel</button>
         </div>
     </div>
+    <hr>
 </div>
 
 <script>

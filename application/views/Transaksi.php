@@ -79,26 +79,28 @@
 
     <!-- First Content: Laptop Cards -->
     <div class="row" id="productCards">
-        <?php foreach($laptop as $l): ?>
+        <?php foreach ($laptop as $l): ?>
             <div class="col-md-4 col-sm-6 col-xs-12 laptop-card" data-title="<?= htmlspecialchars($l['seri_laptop']) ?>" data-brand="<?= htmlspecialchars($l['merk_laptop']) ?>" data-price="<?= $l['harga'] ?>">
-                <div class="card" data-id="<?= $l['id_laptop'] ?>" data-stock="<?= $l['stok'] ?>">
-                    <img src="<?= base_url('assets/images/' . $l['gambar']) ?>" class="card-img-top" alt="<?= htmlspecialchars($l['seri_laptop']) ?>">
-                    <div class="card-body">
-                        <h5 class="card-title"><?= htmlspecialchars($l['seri_laptop']) ?></h5>
-                        <p class="card-text">Merk: <?= htmlspecialchars($l['merk_laptop']) ?></p>
-                        <p class="card-text">Stok: <span class="stock"><?= htmlspecialchars($l['stok']) ?></span></p>
-                        <p class="card-text price">Rp <?= number_format($l['harga'], 0, ',', '.') ?></p>
-                        <div class="input-group">
-                            <button class="btn btn-outline-secondary qty-btn" onclick="updateQty(this, -1)">-</button>
-                            <input type="number" class="form-control qty-input" value="0" min="0" max="<?= $l['stok'] ?>" readonly>
-                            <button class="btn btn-outline-secondary qty-btn" onclick="updateQty(this, 1)">+</button>
+                <div class="card shadow-sm mb-4" data-id="<?= $l['id_laptop'] ?>" data-stock="<?= $l['stok'] ?>" style="border-radius: 10px; overflow: hidden;">
+                    <div class="card-img-container" style="width: 100%; height: 200px; overflow: hidden; background-color: #f5f5f5;">
+                        <img src="<?= base_url('assets/images/' . $l['gambar']) ?>" class="card-img-top" alt="<?= htmlspecialchars($l['seri_laptop']) ?>" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                    <div class="card-body text-center">
+                        <h5 class="card-title mb-1"><?= htmlspecialchars($l['seri_laptop']) ?></h5>
+                        <p class="card-text text-muted small">Brand: <?= htmlspecialchars($l['merk_laptop']) ?></p>
+                        <p class="card-text"><small>Stock: <span class="stock"><?= htmlspecialchars($l['stok']) ?></span></small></p>
+                        <p class="card-text price text-primary fw-bold">Rp <?= number_format($l['harga'], 0, ',', '.') ?></p>
+                        <div class="input-group qty-group mx-auto" style="width: 100px;">
+                            <button class="btn btn-sm btn-outline-secondary qty-btn" onclick="updateQty(this, -1)">-</button>
+                            <input type="number" class="form-control form-control-sm qty-input text-center" value="0" min="0" max="<?= $l['stok'] ?>" readonly style="width: 40px; padding: 0;">
+                            <button class="btn btn-sm btn-outline-secondary qty-btn" onclick="updateQty(this, 1)">+</button>
                         </div>
                     </div>
                 </div>
             </div>
         <?php endforeach; ?>
     </div>
-
+    
     <!-- No Results Message -->
     <div id="noResultsMessage" class="text-center" style="display: none; margin-top: 20px;">
         <h5>No laptops available matching your search.</h5>

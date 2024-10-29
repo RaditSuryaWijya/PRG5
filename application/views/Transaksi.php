@@ -111,67 +111,88 @@
         <i class="bi bi-cart"></i> <span id="floatingCartText">Items (0)</span>
     </button>
 
-    <div class="transaction-background" id="transactionForm" style="display: none;">
-        <div class="transaction-form">
-            <h2 class="text-center mb-4">Transaction Details</h2>
-            
-            <!-- Listed Items Table -->
-            <table class="table table-bordered transaction-table">
-                <thead>
-                    <tr>
-                        <th scope="col">Item</th>
-                        <th scope="col">Quantity</th>
-                        <th scope="col">Unit Price</th>
-                        <th scope="col">Total Price</th>
-                    </tr>
-                </thead>
-                <tbody id="transactionItems">
-                    <!-- Item rows will be added dynamically -->
-                </tbody>
-            </table>
+    <form action="<?= base_url('index.php/TransaksiController/add_trs') ?>" method="post">
+        <div class="transaction-background" id="transactionForm" style="display: none;">
+                <div class="transaction-form">
+                    <input type="hidden" name="id_pembelian" value="<?php echo isset($id_pembelian) ? $id_pembelian : ''; ?>">
+                    <h2 class="text-center mb-4">Transaction Details</h2>
+                    
+                    <!-- Listed Items Table -->
+                    <table class="table table-bordered transaction-table">
+                        <thead>
+                            <tr>
+                                <th scope="col">Item</th>
+                                <th scope="col">Quantity</th>
+                                <th scope="col">Unit Price</th>
+                                <th scope="col">Total Price</th>
+                            </tr>
+                        </thead>
+                        <tbody id="transactionItems">
+                            <!-- Item rows will be added dynamically -->
+                        </tbody>
+                    </table>
 
-            <!-- Customer Information -->
-            <div class="mb-3">
-                <label for="customerName" class="form-label">Customer Name</label>
-                <input type="text" class="form-control" id="customerName" placeholder="Enter your name" required>
-            </div>
-            <div class="mb-3">
-                <label for="customerEmail" class="form-label">Email Address</label>
-                <input type="email" class="form-control" id="customerEmail" placeholder="Enter your email" required>
-            </div>
+                    <!-- Customer Information -->
+                    <div class="mb-3">
+                        <label for="transactionDate" class="form-label">Transaction Date</label>
+                        <input type="text" class="form-control" id="transactionDate" name="transactionDate" readonly>
+                    </div>
 
-            <!-- Payment Information -->
-            <div class="mb-3">
-                <label for="paymentType" class="form-label">Payment Type</label>
-                <select class="form-select" id="paymentType" required>
-                    <option selected disabled>Select payment type</option>
-                    <option value="Bank Transfer">Bank Transfer</option>
-                    <option value="Cash on Delivery">Cash on Delivery</option>
-                </select>
-            </div>
-            <div class="mb-3">
-                <label for="norek" class="form-label">Bank Account</label>
-                <input type="number" class="form-control" id="norek" placeholder="Enter your bank account" required>
-            </div>
-            <div class="mb-3">
-                <label for="transactionNotes" class="form-label">Notes</label>
-                <textarea class="form-control" id="transactionNotes" rows="3" placeholder="Additional notes" required></textarea>
-            </div>
+                    <div class="mb-3">
+                        <label for="customerName" class="form-label">Customer Name</label>
+                        <input type="text" class="form-control" id="customerName" placeholder="Enter your name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="customerEmail" class="form-label">Email Address</label>
+                        <input type="email" class="form-control" id="customerEmail" placeholder="Enter your email" required>
+                    </div>
 
-            <!-- Total Amount -->
-            <div class="mb-3">
-                <h5>Total: <span id="transactionTotal">Rp 0</span></h5>
-            </div>
+                    <!-- Payment Information -->
+                    <div class="mb-3">
+                        <label for="paymentType" class="form-label">Payment Type</label>
+                        <select class="form-select" id="paymentType" name="paymentType" required>
+                            <option selected disabled>Select payment type</option>
+                            <option value="Bank Transfer">Bank Transfer</option>
+                            <option value="Cash on Delivery">Cash on Delivery</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="norek" class="form-label">Bank Account</label>
+                        <input type="number" class="form-control" id="norek" name="norek" placeholder="Enter your bank account" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="transactionNotes" class="form-label">Notes</label>
+                        <textarea class="form-control" id="transactionNotes" rows="3" placeholder="Additional notes" ></textarea>
+                    </div>
 
-            <!-- Confirm Button -->
-            <button class="btn btn-success w-100" onclick="confirmTransaction()">Confirm Purchase</button>
-            <button class="btn btn-secondary w-100 mt-2" onclick="toggleTransactionForm()">Cancel</button>
+                    <!-- Total Amount -->
+                    <div class="mb-3">
+                        <h5>Total: <span id="transactionTotalText">Rp 0</span></h5>
+                        <input type="hidden" id="transactionTotal" name="transactionTotal" value="0">
+                    </div>
+
+                    <!-- Confirm Button -->
+                    <button class="btn btn-success w-100" onclick="confirmTransaction()">Confirm Purchase</button>
+                    <button class="btn btn-secondary w-100 mt-2" onclick="toggleTransactionForm()">Cancel</button>
+                </div>
+            </div>
         </div>
-    </div>
-    <hr>
-</div>
+    </form>
+    
 
 <script>
+    // Fungsi untuk mengatur tanggal saat ini ke input transactionDate
+    document.addEventListener("DOMContentLoaded", function () {
+        const transactionDate = document.getElementById('transactionDate');
+        const today = new Date();
+
+        // Format Tanggal: YYYY-MM-DD
+        const formattedDate = today.toISOString().slice(0, 10);
+
+        // Set nilai input tanggal
+        transactionDate.value = formattedDate;
+    });
+
     document.getElementById('paymentType').addEventListener('change', function() {
         const norekField = document.getElementById('norek');
         
@@ -203,7 +224,7 @@
     function loadTransactionItems() {
         const items = document.querySelectorAll('.qty-input');
         const transactionItems = document.getElementById('transactionItems');
-        transactionItems.innerHTML = ''; // Clear previous items
+        transactionItems.innerHTML = ''; 
         let total = 0;
 
         items.forEach(input => {
@@ -215,7 +236,8 @@
                 const itemTotal = quantity * price;
                 total += itemTotal;
 
-                // Create a new row for each item
+                const id_laptop = card.getAttribute('data-id');
+
                 const row = document.createElement('tr');
                 row.innerHTML = `
                     <td>${title}</td>
@@ -227,14 +249,46 @@
             }
         });
 
-        // Update total amount
-        document.getElementById('transactionTotal').textContent = `Rp ${total.toLocaleString('id-ID')}`;
+        document.getElementById('transactionTotalText').textContent = `Rp ${total.toLocaleString('id-ID')}`;
+        document.getElementById('transactionTotal').value = total; 
     }
 
     function confirmTransaction() {
-        // Implement transaction submission logic here
-        alert('Transaction confirmed!');
-        toggleTransactionForm(); // Hide the form after confirming
+        const items = [];
+        document.querySelectorAll('.qty-input').forEach(input => {
+            const qty = parseInt(input.value, 10);
+            if (qty > 0) {
+                const card = input.closest('.card');
+                const id_laptop = card.getAttribute('data-id'); 
+                const price = parseInt(card.querySelector('.price').textContent.replace('Rp ', '').replace(/\./g, ''));
+                const subtotal = qty * price;
+                items.push({ id_laptop, qty, subtotal }); 
+            }
+        });
+
+        const data = {
+            tipe_pembayaran: document.getElementById('paymentType').value,
+            no_rekening: document.getElementById('norek').value,
+            tgl_beli: document.getElementById('transactionDate').value,
+            total_harga: parseInt(document.getElementById('transactionTotal').value, 10),
+            items: items
+        };
+
+        fetch('<?= base_url("index.php/TransaksiController/add_trs") ?>', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        })
+        .then(response => response.json())
+        .then(result => {
+            if (result.status === 'success') {
+                alert(result.message);
+                toggleTransactionForm(); 
+            } else {
+                alert(result.message);
+            }
+        })
+        .catch(error => console.error('Error:', error));
     }
 
     function updateQty(button, change) {

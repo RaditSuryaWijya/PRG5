@@ -58,3 +58,4 @@ $route['viewMaster'] = "MasterController/view";
 $route['addMaster'] = "MasterController/add";
 $route['viewTransaksi'] = 'TransaksiController/view';
 $route['editForm'] = "MasterController/editLaptop";
+$route['addTransaksi'] = 'TransaksiController/add_trs';

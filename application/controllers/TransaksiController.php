@@ -31,7 +31,7 @@ class TransaksiController extends CI_Controller {
             // 'customer_email' => $customer_email,
             'tipe_pembayaran' => $payment_type,
             'no_rekening' => $bank_account,
-            
+            'tgl_beli' => date('Y-m-d'),
             // 'notes' => $transaction_notes,  
             'total_harga' => $this->input->post('total_amount'), // Ensure you send total_amount from frontend
             // 'created_at' => date('Y-m-d H:i:s'),

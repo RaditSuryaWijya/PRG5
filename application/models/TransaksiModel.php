@@ -10,12 +10,12 @@ class TransaksiModel extends CI_Model{
     }
 
     public function get_all(){
-        return $this->db->get('laptop')->result_array();
+        return $this->db->get('pembelian')->result_array();
     }
 
     public function get_by_id($id)
     {
-        return $this->db->get_where('laptop',['id_laptop' => $id])->row_array();
+        return $this->db->get_where('pembelian',['id_laptop' => $id])->row_array();
     }
 
     public function delete_karyawan($id){
@@ -32,6 +32,12 @@ class TransaksiModel extends CI_Model{
         $this->db->select_max('id_laptop');
         $query = $this->db->get('laptop');
         return $query->row()->id;
+    }
+    public function get_detail_pembelian($id_pembelian) {
+        $this->db->select('id_pembelian, id_laptop, qty, subtotal');
+        $this->db->from('detail_pembelian');
+        $this->db->where('id_pembelian', $id_pembelian);
+        return $this->db->get()->result_array();
     }
     
 }

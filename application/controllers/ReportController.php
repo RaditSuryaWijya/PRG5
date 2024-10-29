@@ -17,6 +17,7 @@ class ReportController extends CI_Controller {
         $this->load->view('template', $data);
     }
 
+
 	public function view()
 	{
         $message = $this->input->get('message') ? $this->input->get('message') : null;

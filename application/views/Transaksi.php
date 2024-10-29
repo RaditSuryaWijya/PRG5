@@ -51,6 +51,14 @@
 </style>
 
 <div class="container mt-5">
+    <?php if (isset($message)): ?>
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <?= $message ?>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    <?php endif; ?>
     <h1 class="text-center mb-4">Laptop Marketplace</h1>
     
     <!-- Search Bar and Filter -->
@@ -112,61 +120,64 @@
     </button>
 
     <div class="transaction-background" id="transactionForm" style="display: none;">
-        <div class="transaction-form">
-            <h2 class="text-center mb-4">Transaction Details</h2>
-            
-            <!-- Listed Items Table -->
-            <table class="table table-bordered transaction-table">
-                <thead>
-                    <tr>
-                        <th scope="col">Item</th>
-                        <th scope="col">Quantity</th>
-                        <th scope="col">Unit Price</th>
-                        <th scope="col">Total Price</th>
-                    </tr>
-                </thead>
-                <tbody id="transactionItems">
-                    <!-- Item rows will be added dynamically -->
-                </tbody>
-            </table>
+        <form id="transactionFormElement" method="post" action="path/to/your/controller/method">
+            <div class="transaction-form">
+                <h2 class="text-center mb-4">Transaction Details</h2>
+                
+                <!-- Listed Items Table -->
+                <table class="table table-bordered transaction-table">
+                    <thead>
+                        <tr>
+                            <th scope="col" style="display: none;">Item ID</th> <!-- Hidden Item ID column -->
+                            <th scope="col">Item</th>
+                            <th scope="col">Quantity</th>
+                            <th scope="col">Unit Price</th>
+                            <th scope="col">Total Price</th>
+                        </tr>
+                    </thead>
+                    <tbody id="transactionItems">
+                        <!-- Item rows will be added dynamically with hidden item ID column -->
+                    </tbody>
+                </table>
 
-            <!-- Customer Information -->
-            <div class="mb-3">
-                <label for="customerName" class="form-label">Customer Name</label>
-                <input type="text" class="form-control" id="customerName" placeholder="Enter your name" required>
-            </div>
-            <div class="mb-3">
-                <label for="customerEmail" class="form-label">Email Address</label>
-                <input type="email" class="form-control" id="customerEmail" placeholder="Enter your email" required>
-            </div>
+                <!-- Customer Information -->
+                <div class="mb-3">
+                    <label for="customerName" class="form-label">Customer Name</label>
+                    <input type="text" class="form-control" id="customerName" name="customerName" placeholder="Enter your name" required>
+                </div>
+                <div class="mb-3">
+                    <label for="customerEmail" class="form-label">Email Address</label>
+                    <input type="email" class="form-control" id="customerEmail" name="customerEmail" placeholder="Enter your email" required>
+                </div>
 
-            <!-- Payment Information -->
-            <div class="mb-3">
-                <label for="paymentType" class="form-label">Payment Type</label>
-                <select class="form-select" id="paymentType" required>
-                    <option selected disabled>Select payment type</option>
-                    <option value="Bank Transfer">Bank Transfer</option>
-                    <option value="Cash on Delivery">Cash on Delivery</option>
-                </select>
-            </div>
-            <div class="mb-3">
-                <label for="norek" class="form-label">Bank Account</label>
-                <input type="number" class="form-control" id="norek" placeholder="Enter your bank account" required>
-            </div>
-            <div class="mb-3">
-                <label for="transactionNotes" class="form-label">Notes</label>
-                <textarea class="form-control" id="transactionNotes" rows="3" placeholder="Additional notes" required></textarea>
-            </div>
+                <!-- Payment Information -->
+                <div class="mb-3">
+                    <label for="paymentType" class="form-label">Payment Type</label>
+                    <select class="form-select" id="paymentType" name="paymentType" required>
+                        <option selected disabled>Select payment type</option>
+                        <option value="Bank Transfer">Bank Transfer</option>
+                        <option value="Cash on Delivery">Cash on Delivery</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="norek" class="form-label">Bank Account</label>
+                    <input type="number" class="form-control" id="norek" name="norek" placeholder="Enter your bank account" required>
+                </div>
+                <div class="mb-3">
+                    <label for="transactionNotes" class="form-label">Notes</label>
+                    <textarea class="form-control" id="transactionNotes" name="transactionNotes" rows="3" placeholder="Additional notes" required></textarea>
+                </div>
 
-            <!-- Total Amount -->
-            <div class="mb-3">
-                <h5>Total: <span id="transactionTotal">Rp 0</span></h5>
-            </div>
+                <!-- Total Amount -->
+                <div class="mb-3">
+                    <h5>Total: <span id="transactionTotal">Rp 0</span></h5>
+                </div>
 
-            <!-- Confirm Button -->
-            <button class="btn btn-success w-100" onclick="confirmTransaction()">Confirm Purchase</button>
-            <button class="btn btn-secondary w-100 mt-2" onclick="toggleTransactionForm()">Cancel</button>
-        </div>
+                <!-- Confirm Button -->
+                <button type="submit" class="btn btn-success w-100">Confirm Purchase</button>
+                <button type="button" class="btn btn-secondary w-100 mt-2" onclick="toggleTransactionForm()">Cancel</button>
+            </div>
+        </form>
     </div>
     <hr>
 </div>
@@ -215,9 +226,13 @@
                 const itemTotal = quantity * price;
                 total += itemTotal;
 
-                // Create a new row for each item
+                // Get the item ID (assuming each card has a data attribute for the ID, e.g., data-id)
+                const itemId = card.getAttribute('data-id');
+
+                // Create a new row for each item with hidden ID column
                 const row = document.createElement('tr');
                 row.innerHTML = `
+                    <td style="display: none;">${itemId}</td> <!-- Hidden ID column -->
                     <td>${title}</td>
                     <td>${quantity}</td>
                     <td>Rp ${price.toLocaleString('id-ID')}</td>
@@ -229,12 +244,6 @@
 
         // Update total amount
         document.getElementById('transactionTotal').textContent = `Rp ${total.toLocaleString('id-ID')}`;
-    }
-
-    function confirmTransaction() {
-        // Implement transaction submission logic here
-        alert('Transaction confirmed!');
-        toggleTransactionForm(); // Hide the form after confirming
     }
 
     function updateQty(button, change) {

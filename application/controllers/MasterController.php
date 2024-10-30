@@ -128,5 +128,9 @@ class MasterController extends CI_Controller {
         // Redirect dengan pesan sukses
         redirect('index.php/MasterController/view?message=Data+berhasil+diupdate!');
     }
-         
+    public function delete($id) {
+        $this->load->model('LaptopModel');
+        $this->LaptopModel->delete_laptop($id);
+        redirect('index.php/MasterController/view'); // Sesuaikan dengan route Anda
+    }        
 }

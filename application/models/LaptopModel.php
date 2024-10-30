@@ -10,7 +10,6 @@ class LaptopModel extends CI_Model{
     }
 
     public function get_all(){
-        // return $this->db->get('laptop')->result_array();
         return $this->db->where('status', 1)->get('laptop')->result_array();
     }
 
@@ -20,8 +19,8 @@ class LaptopModel extends CI_Model{
     }
 
     public function delete_laptop($id){
-        $this->db->where('id_laptop',$id);
-        return $this->db->delete('laptop');
+        $this->db->where('id_laptop', $id);
+        return $this->db->update('laptop', ['status' => 0]);
     }
 
     public function update_laptop($id, $data) {
@@ -34,11 +33,4 @@ class LaptopModel extends CI_Model{
         $query = $this->db->get('laptop');
         return $query->row()->id;
     }
-
-    // public function update_laptop_image($id, $image_name) {
-    //     $this->db->where('id_laptop', $id);
-    //     $this->db->update('laptop', ['gambar' => $image_name]);
-    // }
-    
-    
 }

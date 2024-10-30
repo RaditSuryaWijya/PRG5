@@ -98,7 +98,9 @@
                                 <button onclick="showDetails(<?= htmlspecialchars(json_encode($l), ENT_QUOTES, 'UTF-8') ?>)" class="btn btn-sm btn-info">
                                     <i class="mdi mdi-eye"></i> Details
                                 </button>
-                                <a href="<?= base_url('index.php/MasterKontroller/delete/'.$l['id_laptop']) ?>" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">
+                                <a href="<?= base_url('index.php/MasterController/delete/' . $l['id_laptop']) ?>" 
+                                    class="btn btn-sm btn-danger" 
+                                    onclick="return confirm('Apakah Anda yakin ingin menghapus laptop ini?')">
                                     <i class="mdi mdi-delete"></i> Delete
                                 </a>
                             </td>

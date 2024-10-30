@@ -62,7 +62,7 @@ class ExportPDFController extends CI_Controller {
         }
 
         // Output the generated PDF to the browser
-        // $pdf->Output('D', 'Data-Transaksi-NesTech.pdf'); // D for download
-        $pdf->Output(); // D for download
+        $pdf->Output('D', 'Data-Transaksi-NesTech.pdf'); // D for download
+        // $pdf->Output(); // D for download
     }
 }

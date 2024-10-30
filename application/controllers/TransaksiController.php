@@ -5,6 +5,7 @@ class TransaksiController extends CI_Controller {
     public function __construct(){
         parent::__construct();
         $this->load->model('LaptopModel');
+        $this->load->model('TransaksiModel');
     }
 
 	public function view()
@@ -33,29 +34,28 @@ class TransaksiController extends CI_Controller {
             'no_rekening' => $bank_account,
             'tgl_beli' => date('Y-m-d'),
             // 'notes' => $transaction_notes,  
-            'total_harga' => $this->input->post('total_amount'), // Ensure you send total_amount from frontend
+            'total_harga' => str_replace('.', '', $this->input->post('total_amount')),
             // 'created_at' => date('Y-m-d H:i:s'),
         ];
         
         // Insert transaction and get the transaction ID
-        $transaction_id = $this->Transaction_model->insert_transaction($transaction_data);
+        $transaction_id = $this->TransaksiModel->insert_transaction($transaction_data);
         
         // Get the transaction items from POST data
         $items = $this->input->post('items'); // Expecting items as JSON string
         
         foreach ($items as $item) {
             $detail_data = [
-                'transaction_id' => $transaction_id,
-                'item_id' => $item['item_id'], // Get from your item object
-                'quantity' => $item['quantity'],
-                'unit_price' => $item['unit_price'],
-                'total_price' => $item['total_price'],
+                'id_pembelian' => $transaction_id,
+                'id_laptop' => $item['item_id'], // Get from your item object
+                'qty' => $item['quantity'],
+                'subtotal' => $item['total_price']
             ];
             // Insert each item into the transaction_details table
-            $this->Transaction_model->insert_transaction_detail($detail_data);
+            $this->Transaction_model->insert_detail($detail_data);
         }
         
         // Redirect or return a response
-        redirect('transaction/success'); // Change this to your desired redirection
+        redirect('index.php/TransaksiController/view?message=Transaksi+berhasil!');
     }
 }

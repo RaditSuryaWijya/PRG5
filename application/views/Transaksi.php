@@ -120,7 +120,7 @@
     </button>
 
     <div class="transaction-background" id="transactionForm" style="display: none;">
-        <form id="transactionFormElement" method="post" action="path/to/your/controller/method">
+        <form id="transactionFormElement" method="post" action="<?= base_url('index.php/TransaksiController/submit') ?>">
             <div class="transaction-form">
                 <h2 class="text-center mb-4">Transaction Details</h2>
                 
@@ -170,7 +170,7 @@
 
                 <!-- Total Amount -->
                 <div class="mb-3">
-                    <h5>Total: <span id="transactionTotal">Rp 0</span></h5>
+                    <h5>Total: Rp <span id="transactionTotal" nama="total_amount"> 0</span></h5>
                 </div>
 
                 <!-- Confirm Button -->
@@ -243,7 +243,7 @@
         });
 
         // Update total amount
-        document.getElementById('transactionTotal').textContent = `Rp ${total.toLocaleString('id-ID')}`;
+        document.getElementById('transactionTotal').textContent = `${total.toLocaleString('id-ID')}`;
     }
 
     function updateQty(button, change) {

@@ -72,5 +72,61 @@ class MasterController extends CI_Controller {
             $error = $this->upload->display_errors();
             redirect('index.php/MasterController/view?message=' . urlencode($error));
         }
-    }       
+    }  
+    public function editLaptop() {
+        // Ambil data dari form
+        $id = $this->input->post('id');
+        $seri = $this->input->post('seri'); 
+        $merk = $this->input->post('merk'); 
+        $stok = $this->input->post('stok');
+        $harga = $this->input->post('harga'); 
+        $currentImage = $this->input->post('currentImage'); // Nama gambar saat ini
+    
+        $gambar = $currentImage; // Default gambar adalah gambar lama
+    
+        // Cek apakah ada file gambar yang di-upload
+        if (!empty($_FILES['gambar']['name'])) {
+            $this->load->library('upload');
+    
+            // Konfigurasi upload
+            $config['upload_path'] = './assets/images/';
+            $config['allowed_types'] = 'jpg|jpeg|png|gif';
+            $config['max_size'] = 2048; // Maksimum ukuran 2MB
+            $config['file_name'] = time() . '_' . $_FILES['gambar']['name']; // Nama unik
+    
+            $this->upload->initialize($config);
+    
+            // Proses upload
+            if ($this->upload->do_upload('gambar')) {
+                // Ambil nama file baru
+                $gambar = $this->upload->data('file_name');
+    
+                // Opsional: Hapus gambar lama jika ada dan berbeda dari default
+                if ($currentImage && file_exists('./assets/images/' . $currentImage)) {
+                    unlink('./assets/images/' . $currentImage);
+                }
+            } else {
+                // Jika gagal upload, tampilkan pesan error
+                $error = $this->upload->display_errors();
+                redirect('index.php/MasterController/view?message=' . urlencode($error));
+                return; // Stop eksekusi
+            }
+        }
+    
+        // Siapkan data untuk di-update
+        $data = [
+            'seri_laptop' => $seri,
+            'merk_laptop' => $merk,
+            'stok' => $stok,
+            'harga' => $harga,
+            'gambar' => $gambar
+        ];
+    
+        // Update data di database
+        $this->LaptopModel->update_laptop($id, $data);
+    
+        // Redirect dengan pesan sukses
+        redirect('index.php/MasterController/view?message=Data+berhasil+diupdate!');
+    }
+         
 }

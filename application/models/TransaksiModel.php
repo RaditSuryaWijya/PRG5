@@ -1,7 +1,7 @@
 <?php
 
-class TransaksiModel extends CI_Model{
-    public function __construct(){
+class TransaksiModel extends CI_Model {
+    public function __construct() {
         parent::__construct();
         $this->load->database();
     }

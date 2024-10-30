@@ -120,7 +120,7 @@
     </button>
 
     <div class="transaction-background" id="transactionForm" style="display: none;">
-        <form id="transactionFormElement" method="post" action="path/to/your/controller/method">
+        <form id="transactionFormElement" method="post" action="<?= base_url('index.php/TransaksiController/submit') ?>">
             <div class="transaction-form">
                 <h2 class="text-center mb-4">Transaction Details</h2>
                 
@@ -170,7 +170,8 @@
 
                 <!-- Total Amount -->
                 <div class="mb-3">
-                    <h5>Total: <span id="transactionTotal">Rp 0</span></h5>
+                    <h5>Total: Rp <span id="transactionTotal"> 0</span></h5>
+                    <input type="hidden" name="total_amount" id="total_amount">
                 </div>
 
                 <!-- Confirm Button -->
@@ -216,6 +217,7 @@
         const transactionItems = document.getElementById('transactionItems');
         transactionItems.innerHTML = ''; // Clear previous items
         let total = 0;
+        let itemArray = []; // Array to hold item data for submission
 
         items.forEach(input => {
             const quantity = parseInt(input.value, 10) || 0;
@@ -226,7 +228,7 @@
                 const itemTotal = quantity * price;
                 total += itemTotal;
 
-                // Get the item ID (assuming each card has a data attribute for the ID, e.g., data-id)
+                // Get the item ID
                 const itemId = card.getAttribute('data-id');
 
                 // Create a new row for each item with hidden ID column
@@ -239,11 +241,26 @@
                     <td>Rp ${itemTotal.toLocaleString('id-ID')}</td>
                 `;
                 transactionItems.appendChild(row);
+
+                // Push item data to the array
+                itemArray.push({
+                    item_id: itemId,
+                    quantity: quantity,
+                    total_price: itemTotal
+                });
             }
         });
 
         // Update total amount
-        document.getElementById('transactionTotal').textContent = `Rp ${total.toLocaleString('id-ID')}`;
+        document.getElementById('transactionTotal').textContent = `${total.toLocaleString('id-ID')}`;
+        document.getElementById('total_amount').value = total;
+
+        // Store the items array in a hidden input field to send with the form
+        const itemsInput = document.createElement('input');
+        itemsInput.type = 'hidden';
+        itemsInput.name = 'items';
+        itemsInput.value = JSON.stringify(itemArray); // Convert to JSON
+        document.getElementById('transactionFormElement').appendChild(itemsInput);
     }
 
     function updateQty(button, change) {

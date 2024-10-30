@@ -90,8 +90,10 @@
                             <td style="text-align: right;">Rp <?= number_format($l['harga'], 0, ',', '.') ?></td>
                             <td class="hidden-column"><?= $l['gambar'] ?></td> <!-- Hidden Gambar column -->
                             <td>
-                                <button onclick="editData(<?= htmlspecialchars(json_encode($l), ENT_QUOTES, 'UTF-8') ?>)" class="btn btn-sm btn-warning">
-                                    <i class="mdi mdi-pencil"></i> Edit
+                                <button 
+                                onclick="editData(<?= htmlspecialchars(json_encode($l), ENT_QUOTES, 'UTF-8') ?>)" 
+                                class="btn btn-sm btn-warning">
+                                <i class="mdi mdi-pencil"></i> Edit
                                 </button>
                                 <button onclick="showDetails(<?= htmlspecialchars(json_encode($l), ENT_QUOTES, 'UTF-8') ?>)" class="btn btn-sm btn-info">
                                     <i class="mdi mdi-eye"></i> Details
@@ -160,31 +162,31 @@
                 <i class="mdi mdi-pencil"></i> Edit Laptop Data
             </div>
             <div class="card-body">
-                <form id="editForm" action="<?= base_url('index.php/MasterController/editLaptop') ?>" method="post" enctype="multipart/form-data">
-                    <input type="hidden" id="edit_id" name="id">
+                <form id="editForm" action="<?= site_url('index.php/MasterController/editLaptop') ?>" method="post" enctype="multipart/form-data">
+                    <input type="hidden" id="edit_id" name="id" value="">
                     <div class="mb-3">
                         <label for="edit_seri" class="form-label">Serie</label>
-                        <input type="text" class="form-control" id="edit_seri" name="seri" required>
+                        <input type="text" class="form-control" id="edit_seri" name="seri"value="" required>
                     </div>
                     <div class="mb-3">
                         <label for="edit_merk" class="form-label">Merk</label>
                         <select class="form-select" name="merk" id="edit_merk" required>
-                            <option value="Lenovo">Lenovo</option>
-                            <option value="MSI">MSI</option>
-                            <option value="HP">HP</option>
+                            <option value="Lenovo"> Lenovo</option>
+                            <option value="MSI"> MSI</option>
+                            <option value="HP"> HP</option>
                             <option value="Acer">Acer</option>
                             <option value="Asus">Asus</option>
                             <option value="Predator">Predator</option>
-                            <option value="Alienware">Alienware</option>
+                            <option value="Alienware"> Alienware</option>
                         </select>
                     </div>
                     <div class="mb-3">
                         <label for="edit_stok" class="form-label">Stok</label>
-                        <input type="number" class="form-control" id="edit_stok" name="stok" required>
+                        <input type="number" class="form-control" id="edit_stok" name="stok" value="" required>
                     </div>
                     <div class="mb-3">
                         <label for="edit_harga" class="form-label">Harga</label>
-                        <input type="number" class="form-control" id="edit_harga" name="harga" required>
+                        <input type="number" class="form-control" id="edit_harga" name="harga" value="" required>
                     </div>
                     <div class="mb-3">
                         <label for="edit_gambar" class="form-label">Gambar</label>
@@ -193,7 +195,9 @@
                     </div>
                     <div class="mb-3">
                         <label>Current Image:</label><br>
-                        <img id="currentImage" src="" alt="Current Laptop Image" style="max-width: 150px; height: auto; display: none;">
+                        <img id="currentImagePreview" src="" alt="Current Laptop Image" 
+                            style="max-width: 150px; height: auto; display: none;">
+                        <input type="hidden" id="currentImageInput" name="currentImage" value="">
                     </div>
                     <button type="submit" class="btn btn-primary">Update</button>
                     <button type="button" onclick="toggleForm('main')" class="btn btn-secondary">Cancel</button>
@@ -211,22 +215,28 @@
     }
 
     function editData(data) {
-        toggleForm('edit');
+        toggleForm('edit'); // Show the edit form
+        // Populate form fields
         document.getElementById('edit_id').value = data.id_laptop;
         document.getElementById('edit_seri').value = data.seri_laptop;
         document.getElementById('edit_merk').value = data.merk_laptop;
         document.getElementById('edit_stok').value = data.stok;
         document.getElementById('edit_harga').value = data.harga;
 
-        // Set the image source for the current image
-        const currentImage = document.getElementById('currentImage');
+        // Set hidden input untuk gambar saat ini
+        const currentImageInput = document.getElementById('currentImageInput');
+        currentImageInput.value = data.gambar;
+
+        // Tampilkan pratinjau gambar jika ada
+        const currentImagePreview = document.getElementById('currentImagePreview');
         if (data.gambar) {
-            currentImage.src = '<?= base_url('assets/images/') ?>' + data.gambar; // Adjust the path if needed
-            currentImage.style.display = 'block'; // Show the image
+            currentImagePreview.src = '<?= base_url('assets/images/') ?>' + data.gambar;
+            currentImagePreview.style.display = 'block';
         } else {
-            currentImage.style.display = 'none'; // Hide if no image
+            currentImagePreview.style.display = 'none';
         }
     }
+
 
     function showDetails(data) {
         document.getElementById('detailSerie').textContent = data.seri_laptop;

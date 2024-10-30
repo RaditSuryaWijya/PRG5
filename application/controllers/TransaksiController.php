@@ -2,18 +2,20 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class TransaksiController extends CI_Controller {
-    public function __construct(){
+    public function __construct() {
         parent::__construct();
         $this->load->model('LaptopModel');
+        $this->load->model('TransaksiModel');
     }
 
-	public function view()
-	{
+    public function view() {
         $data['title'] = 'Technest Marketplace';
         $data['laptop'] = $this->LaptopModel->get_all();
 
+        // Memuat konten halaman
         $data['content'] = $this->load->view('Transaksi', $data, TRUE);
 
+        // Memuat template
         $this->load->view('template', $data);
 	}
 

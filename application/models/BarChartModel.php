@@ -1,6 +1,6 @@
 <?php
 
-class BarChartM extends CI_Model {
+class BarChartModel extends CI_Model {
 
     public function __construct() {
         $this->load->database();

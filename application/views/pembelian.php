@@ -22,6 +22,14 @@
                     <i class="fas fa-table me-1"></i>
                     Data Pembelian
                 </div>
+                <div class="ms-auto"> <!-- Use ms-auto for Bootstrap 5 -->
+                    <button onclick="exportToExcel()" class="btn btn-sm btn-success me-2"> <!-- Add me-2 for spacing -->
+                        <i class="mdi mdi-file-excel"></i> Export to Excel
+                    </button>
+                    <button onclick="exportToPDF()" class="btn btn-sm btn-danger">
+                        <i class="mdi mdi-file-pdf"></i> Export to PDF
+                    </button>
+                </div>
             </div>
             <div class="card-body">
                 <table id="datatablesSimple">
@@ -135,4 +143,14 @@
         var myModal = new bootstrap.Modal(document.getElementById('detailModal'));
         myModal.show();
     }
+
+    
+    function exportToExcel() {
+         window.location.href = "<?= base_url('ExportExcelController/exportExcel') ?>";
+    }
+
+    function exportToPDF() {
+        window.location.href = "<?= base_url('ExportPDFController/exportPDF') ?>";
+    }
+    
 </script>

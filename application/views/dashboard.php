@@ -7,19 +7,23 @@
                             <div class="col-xl-6">
                                 <div class="card mb-4">
                                     <div class="card-header">
-                                        <i class="fas fa-chart-area me-1"></i>
-                                        Area Chart Example
+                                        <i class="fas fa-chart-doughnut me-1"></i>
+                                        Jumlah Stok Laptop berdasarkan Merk
                                     </div>
-                                    <div class="card-body"><canvas id="myAreaChart" width="100%" height="40"></canvas></div>
+                                    <div class="card-body">
+                                        <canvas id="myDoughnutChart" width="100%" height="40"></canvas>
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-xl-6">
                                 <div class="card mb-4">
                                     <div class="card-header">
                                         <i class="fas fa-chart-bar me-1"></i>
-                                        Bar Chart
+                                        Jumlah Penjualan Laptop berdasarkan Merk
                                     </div>
-                                    <div class="card-body"><canvas id="myBarChart" width="100%" height="40"></canvas></div>
+                                    <div class="card-body">
+                                        <canvas id="myBarChart" width="100%" height="40"></canvas>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -76,7 +80,7 @@
                         // Fungsi untuk menampilkan Bar Chart menggunakan data dari AJAX
                         const loadBarChart = (chartId) => {
                             $.ajax({
-                                url: baseUrl + 'BarChartC/chart_data',
+                                url: baseUrl + 'BarChartController/chart_data',
                                 dataType: 'json',
                                 method: 'GET',
                                 success: response => {
@@ -132,6 +136,87 @@
                                 }
                             });
                         };
+
+                        const loadDoughnutChart = (chartId) => {
+                            $.ajax({
+                                url: baseUrl + 'PieChartController/chart_data', 
+                                dataType: 'json',
+                                method: 'GET', 
+                                success: response => {
+                                    let chartX = [];
+                                    let chartY = [];
+
+                                    // Process the data correctly
+                                    response.chart_data.forEach(item => {
+                                        chartX.push(item.merk_laptop);
+                                        chartY.push(item.total_stok);
+                                    });
+
+                                    const chartData = {
+                                        labels: chartX, 
+                                        datasets: [{
+                                            label: 'Laptop Stock by Brand', 
+                                            data: chartY, 
+                                            backgroundColor: [
+                                                'rgba(255, 99, 132, 0.6)',
+                                                'rgba(54, 162, 235, 0.6)',
+                                                'rgba(255, 206, 86, 0.6)',
+                                                'rgba(75, 192, 192, 0.6)',
+                                                'rgba(153, 102, 255, 0.6)'
+                                            ],
+                                            borderColor: [
+                                                'rgba(255, 99, 132, 1)',
+                                                'rgba(54, 162, 235, 1)',
+                                                'rgba(255, 206, 86, 1)',
+                                                'rgba(75, 192, 192, 1)',
+                                                'rgba(153, 102, 255, 1)'
+                                            ],
+                                            borderWidth: 1
+                                        }]
+                                    };
+
+                                    const ctx = document.getElementById(chartId).getContext('2d');
+                                    const config = {
+                                        type: 'doughnut', // Tipe chart
+                                        data: chartData,
+                                        options: {
+                                            responsive: true,
+                                            // animation: {
+                                            //     duration: 1000, // Durasi animasi
+                                            //     easing: 'easeInOutBounce' // Jenis easing
+                                            // },
+                                            plugins: {
+                                                legend: {
+                                                    position: 'top', // Posisi legenda
+                                                },
+                                                title: {
+                                                    display: true,
+                                                    text: 'Laptop Stock by Brand', // Judul chart
+                                                    font: {
+                                                        size: 20 // Ukuran font judul
+                                                    }
+                                                },
+                                                tooltip: {
+                                                    callbacks: {
+                                                        label: function(tooltipItem) {
+                                                            return tooltipItem.label + ': '     + tooltipItem.raw; // Menampilkan label dan data
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    };
+
+                                    new Chart(ctx, config);
+                                },
+                                error: err => {
+                                    console.error('Error fetching chart data:', err);
+                                }
+                            });
+                        };
+
+                        // Call the function with the correct chart ID
+                        loadDoughnutChart('myDoughnutChart');
 
                         // Panggil fungsi untuk menampilkan chart
                         loadBarChart('myBarChart');

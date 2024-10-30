@@ -8,14 +8,21 @@ class TransaksiController extends CI_Controller {
         $this->load->model('TransaksiModel');
     }
 
-	public function view()
+	public function main_page($title,$message=null)
 	{
         $data['title'] = 'Technest Marketplace';
+        $data['message'] = $message;
         $data['laptop'] = $this->LaptopModel->get_all();
 
         $data['content'] = $this->load->view('Transaksi', $data, TRUE);
 
         $this->load->view('template', $data);
+	}
+
+    public function view()
+	{
+        $message = $this->input->get('message') ? $this->input->get('message') : null;
+        $this->main_page('Transaksi Laptop',$message);
 	}
 
     public function submit() {

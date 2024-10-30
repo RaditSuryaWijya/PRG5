@@ -58,7 +58,7 @@ class ExportPDFController extends CI_Controller {
                 align: 'L', // rata tengah
                 // fill: 1     // 1 untuk memberi warna latar belakang??
             );
-            // $pdf->Ln();
+            $pdf->Ln();
         }
 
         // Output the generated PDF to the browser

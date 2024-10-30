@@ -34,15 +34,16 @@ class TransaksiController extends CI_Controller {
             'no_rekening' => $bank_account,
             'tgl_beli' => date('Y-m-d'),
             // 'notes' => $transaction_notes,  
-            'total_harga' => str_replace('.', '', $this->input->post('total_amount')),
+            'total_harga' => $this->input->post('total_amount'),
             // 'created_at' => date('Y-m-d H:i:s'),
         ];
         
         // Insert transaction and get the transaction ID
-        $transaction_id = $this->TransaksiModel->insert_transaction($transaction_data);
-        
+        $this->TransaksiModel->insert_transaction($transaction_data);
         // Get the transaction items from POST data
-        $items = $this->input->post('items'); // Expecting items as JSON string
+        $items = json_decode($this->input->post('items'), true);
+
+        $transaction_id = $this->TransaksiModel->get_latest_id();
         
         foreach ($items as $item) {
             $detail_data = [
@@ -52,7 +53,7 @@ class TransaksiController extends CI_Controller {
                 'subtotal' => $item['total_price']
             ];
             // Insert each item into the transaction_details table
-            $this->Transaction_model->insert_detail($detail_data);
+            $this->TransaksiModel->insert_detail($detail_data);
         }
         
         // Redirect or return a response

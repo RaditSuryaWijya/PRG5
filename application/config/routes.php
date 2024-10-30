@@ -57,7 +57,9 @@ $route['viewLaptop'] = "LaptopController/view";
 $route['viewMaster'] = "MasterController/view";
 $route['addMaster'] = "MasterController/add";
 $route['viewTransaksi'] = 'TransaksiController/view';
+$route['submitTransaksi'] = 'TransaksiController/submit';
 $route['editForm'] = "MasterController/editLaptop";
+
 
 $route['exportToExcel'] = 'MasterController/exportToExcel';
 $route['exportToPDF'] = 'MasterController/exportToPDF';

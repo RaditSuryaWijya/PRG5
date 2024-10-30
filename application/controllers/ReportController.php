@@ -23,5 +23,4 @@ class ReportController extends CI_Controller {
         $message = $this->input->get('message') ? $this->input->get('message') : null;
         $this->main_page('Report Transaksi',$message);
 	}
-         
 }

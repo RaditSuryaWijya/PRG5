@@ -257,4 +257,5 @@
         var myModal = new bootstrap.Modal(document.getElementById('detailModal'));
         myModal.show();
     }
+    // coba
 </script>
